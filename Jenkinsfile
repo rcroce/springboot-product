@@ -1,9 +1,16 @@
 pipeline {
   agent any
+	tools {
+		maven 'Maven 3.5.2'
+	}
+	options {
+		timeout(time: 10, unit: 'MINUTES') 
+	}
   stages {
-    stage('Compile') {
+    stage('Build') {
       steps {
-        bat(script: 'mvn clean', encoding: 'UT-8')
+				checkout scm
+				sh 'mvn clean build'
       }
     }
   }
