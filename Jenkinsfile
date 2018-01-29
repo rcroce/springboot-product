@@ -12,12 +12,12 @@ pipeline {
     stage('Build') {
       steps {
 				checkout scm
-				sh 'mvn clean install'
+				sh 'mvn clean package'
       }
     }
     stage('Test') {
       steps {
-				sh 'mvn --version'
+				sh 'mvn verify'
       }
     }
     stage('Deploy') {
@@ -26,4 +26,21 @@ pipeline {
       }
     }
   }
+	post {
+		always {
+			deleteDir()
+		}
+    
+		success {
+			mail(to: "rodrigo.croce@gmail.com", 
+				 subject: "SUCCESS: ${currentBuild.fullDisplayName}",
+				 body: "Build passed! ${env.BUILD_URL}")
+		}
+
+		failure {
+			mail(to: "rodrigo.croce@gmail.com", 
+				 subject: "FAILURE: ${currentBuild.fullDisplayName}",
+				 body: "Build failed! ${env.BUILD_URL}")
+		}
+	}
 }
