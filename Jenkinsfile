@@ -3,14 +3,11 @@ pipeline {
 	tools {
 		maven 'Maven 3.5.2'
 	}
-	options {
-		timeout(time: 10, unit: 'MINUTES') 
-	}
   stages {
-    stage('Build') {
+    stage('Version') {
       steps {
 				checkout scm
-				sh 'mvn clean build'
+				sh 'mvn --version'
       }
     }
   }
